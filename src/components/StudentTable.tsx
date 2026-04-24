@@ -18,10 +18,10 @@ type Props = {
 export function StudentTable({ students, onDelete }: Props) {
   return (
     <div
-      className="overflow-hidden rounded-xl border border-border bg-card"
+      className="overflow-x-auto rounded-xl border border-border bg-card"
       style={{ boxShadow: "var(--shadow-card)" }}
     >
-      <Table>
+      <Table className="min-w-[640px]">
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
