@@ -1,53 +1,53 @@
+import { authApi } from "./auth";
+
 export type Student = {
   id: string;
   name: string;
   email: string;
   course: string;
-  year: number;
+  year?: number; // Backend might not have year, making it optional or defaults to 1
 };
 
-const KEY = "erp_students";
-
-const seed: Student[] = [
-  { id: "1", name: "Aisha Khan", email: "aisha@example.com", course: "Computer Science", year: 2 },
-  { id: "2", name: "Liam Chen", email: "liam@example.com", course: "Mechanical Engineering", year: 3 },
-  { id: "3", name: "Sofia Garcia", email: "sofia@example.com", course: "Business Admin", year: 1 },
-  { id: "4", name: "Noah Patel", email: "noah@example.com", course: "Data Science", year: 4 },
-];
-
-function read(): Student[] {
-  if (typeof window === "undefined") return seed;
-  const raw = localStorage.getItem(KEY);
-  if (!raw) {
-    localStorage.setItem(KEY, JSON.stringify(seed));
-    return seed;
+const getApiUrl = () => {
+  if (typeof window === 'undefined') {
+    return process.env.VITE_API_URL || "http://backend:5001/api";
   }
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return seed;
-  }
-}
+  return import.meta.env.VITE_API_URL || "http://localhost:5001/api";
+};
+const API_URL = getApiUrl();
 
-function write(list: Student[]) {
-  localStorage.setItem(KEY, JSON.stringify(list));
-}
 
-// Mock API
+const getHeaders = () => {
+  const token = authApi.getToken();
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+};
+
 export const studentsApi = {
   list: async (): Promise<Student[]> => {
-    await new Promise((r) => setTimeout(r, 200));
-    return read();
+    const res = await fetch(`${API_URL}/students`, { headers: getHeaders() });
+    if (!res.ok) throw new Error("Failed to fetch students");
+    const data = await res.json();
+    return data.map((s: any) => ({ ...s, id: s.id.toString(), year: s.year || 1 }));
   },
   add: async (data: Omit<Student, "id">): Promise<Student> => {
-    await new Promise((r) => setTimeout(r, 200));
-    const list = read();
-    const next: Student = { ...data, id: crypto.randomUUID() };
-    write([next, ...list]);
-    return next;
+    const res = await fetch(`${API_URL}/students`, {
+      method: "POST",
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Failed to add student");
+    const json = await res.json();
+    const created = json.student;
+    return { ...created, id: created.id.toString(), year: created.year || 1 };
   },
   remove: async (id: string): Promise<void> => {
-    await new Promise((r) => setTimeout(r, 150));
-    write(read().filter((s) => s.id !== id));
+    const res = await fetch(`${API_URL}/students/${id}`, {
+      method: "DELETE",
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error("Failed to delete student");
   },
 };

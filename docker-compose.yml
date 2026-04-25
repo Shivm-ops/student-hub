@@ -1,0 +1,34 @@
+services:
+  backend:
+    # CD: IMAGE_BACKEND is set by GitHub Actions; locally falls back to build
+    image: ${IMAGE_BACKEND:-student-hub-backend:local}
+    build:
+      context: ./backend-student-hub
+    container_name: student-hub-backend
+    ports:
+      - "5001:5001"
+    # ⚠️ Secrets injected at runtime via env_file — NEVER baked into the image
+    env_file:
+      - ./backend-student-hub/.env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5001/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    # CD: IMAGE_FRONTEND is set by GitHub Actions; locally falls back to build
+    image: ${IMAGE_FRONTEND:-student-hub-frontend:local}
+    build:
+      context: .
+    container_name: student-hub-frontend
+    ports:
+      - "8888:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      # VITE_API_URL is a build-time var (non-secret) — safe to set here
+      - VITE_API_URL=http://backend:5001/api
+    restart: unless-stopped
