@@ -45,6 +45,8 @@ jobs:
         with:
           context: .
           push: true
+          build-args: |
+            VITE_API_URL=http://13.206.144.27:5001
           tags: |
             shivam0023/student-hub-frontend:latest
             shivam0023/student-hub-frontend:${{ steps.meta.outputs.version }}
