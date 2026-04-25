@@ -17,19 +17,17 @@ jobs:
 
     outputs:
       image_tag: ${{ steps.meta.outputs.version }}
-      image_frontend: ${{ steps.names.outputs.frontend }}
-      image_backend: ${{ steps.names.outputs.backend }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Build image names from the secret (not top-level env — avoids empty-string bug)
-      - name: Set image names
-        id: names
+      - name: Verify Secrets
         run: |
-          echo "frontend=${{ secrets.DOCKERHUB_USERNAME }}/student-hub-frontend" >> $GITHUB_OUTPUT
-          echo "backend=${{ secrets.DOCKERHUB_USERNAME }}/student-hub-backend"   >> $GITHUB_OUTPUT
+          if [ -z "${{ secrets.DOCKERHUB_USERNAME }}" ]; then
+            echo "❌ Error: DOCKERHUB_USERNAME secret is missing or empty!"
+            exit 1
+          fi
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -41,7 +39,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ steps.names.outputs.frontend }}
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/student-hub-frontend
           tags: |
             type=sha,format=short
 
@@ -55,8 +53,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ steps.names.outputs.frontend }}:latest
-            ${{ steps.names.outputs.frontend }}:${{ steps.meta.outputs.version }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/student-hub-frontend:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/student-hub-frontend:${{ steps.meta.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -67,8 +65,8 @@ jobs:
           context: ./backend-student-hub
           push: true
           tags: |
-            ${{ steps.names.outputs.backend }}:latest
-            ${{ steps.names.outputs.backend }}:${{ steps.meta.outputs.version }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/student-hub-backend:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/student-hub-backend:${{ steps.meta.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -93,20 +91,20 @@ jobs:
           script: |
             set -e
 
-            IMAGE_FRONTEND="${{ needs.build-and-push.outputs.image_frontend }}"
-            IMAGE_BACKEND="${{ needs.build-and-push.outputs.image_backend }}"
+            IMAGE_FRONTEND="${{ secrets.DOCKERHUB_USERNAME }}/student-hub-frontend:latest"
+            IMAGE_BACKEND="${{ secrets.DOCKERHUB_USERNAME }}/student-hub-backend:latest"
 
             echo "📦 Pulling latest images..."
-            docker pull "${IMAGE_FRONTEND}:latest"
-            docker pull "${IMAGE_BACKEND}:latest"
+            docker pull "${IMAGE_FRONTEND}"
+            docker pull "${IMAGE_BACKEND}"
 
             echo "🔄 Restarting containers..."
             cd ~/student-hub
 
             # ⚠️  App secrets live ONLY on the server in .env — never in GitHub
             docker compose down
-            IMAGE_FRONTEND="${IMAGE_FRONTEND}:latest" \
-            IMAGE_BACKEND="${IMAGE_BACKEND}:latest" \
+            IMAGE_FRONTEND="${IMAGE_FRONTEND}" \
+            IMAGE_BACKEND="${IMAGE_BACKEND}" \
             docker compose up -d
 
             echo "✅ Deployed successfully!"
