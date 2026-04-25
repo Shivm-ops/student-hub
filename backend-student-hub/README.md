@@ -3,6 +3,7 @@
 A simple, clean Node.js and Express backend with Supabase integration and JWT authentication.
 
 ## Features
+
 - **Project Setup**: Express.js with a modular folder structure.
 - **Supabase Integration**: Connects to Supabase using `@supabase/supabase-js`.
 - **Authentication**: JWT-based login for an admin user.
@@ -10,6 +11,7 @@ A simple, clean Node.js and Express backend with Supabase integration and JWT au
 - **Secret Management**: Environment variables handled via `.env`.
 
 ## Folder Structure
+
 ```text
 backend-student-hub/
 ├── config/             # Configuration files (Supabase)
@@ -26,17 +28,21 @@ backend-student-hub/
 ## Setup Instructions
 
 ### 1. Clone the repository and navigate to the directory
+
 ```bash
 cd backend-student-hub
 ```
 
 ### 2. Install dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Configure Environment Variables
+
 Create a `.env` file in the root directory (use `.env.example` as a template) and add your Supabase credentials:
+
 ```text
 PORT=5000
 SUPABASE_URL=YOUR_SUPABASE_URL
@@ -45,13 +51,16 @@ JWT_SECRET=your_jwt_secret_key
 ```
 
 ### 4. Database Setup (Supabase)
+
 Ensure you have a `students` table in your Supabase database with the following fields:
+
 - `id`: int8 (Primary Key, Auto-increment)
 - `name`: text
 - `email`: text
 - `course`: text
 
 ### 5. Start the server
+
 ```bash
 npm start
 # or
@@ -61,15 +70,18 @@ node server.js
 ## API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/login`
   - Body: `{ "username": "admin", "password": "admin123" }`
   - Returns: JWT Token
 
 ### Students (Protected - Requires Bearer Token)
+
 - `GET /api/students` -> Fetch all students.
 - `POST /api/students` -> Create a new student.
 - `DELETE /api/students/:id` -> Delete a student by ID.
 
 ## Security Note
+
 - Never expose the `SUPABASE_SERVICE_ROLE_KEY` in the frontend.
 - This backend uses the service role key to perform admin-level operations securely.

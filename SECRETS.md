@@ -11,10 +11,10 @@ Go to: **GitHub Repo → Settings → Secrets and variables → Actions → New 
 
 ### 🐳 Docker Hub Secrets
 
-| Secret Name | Value | Why |
-|---|---|---|
-| `DOCKERHUB_USERNAME` | Your Docker Hub username | Used to tag and push images |
-| `DOCKERHUB_TOKEN` | Docker Hub access token (not password) | Authenticate to push images securely |
+| Secret Name          | Value                                  | Why                                  |
+| -------------------- | -------------------------------------- | ------------------------------------ |
+| `DOCKERHUB_USERNAME` | Your Docker Hub username               | Used to tag and push images          |
+| `DOCKERHUB_TOKEN`    | Docker Hub access token (not password) | Authenticate to push images securely |
 
 > **How to get `DOCKERHUB_TOKEN`:**
 > Docker Hub → Account Settings → Security → New Access Token
@@ -24,14 +24,15 @@ Go to: **GitHub Repo → Settings → Secrets and variables → Actions → New 
 
 ### 🖥️ Server Deployment Secrets (optional — only if deploying)
 
-| Secret Name | Value | Why |
-|---|---|---|
-| `SERVER_HOST` | Your server IP or domain | SSH target for deployment |
-| `SERVER_USER` | SSH username (e.g., `ubuntu`) | SSH login |
-| `SERVER_SSH_KEY` | Private SSH key (full content) | Passwordless SSH auth |
-| `SERVER_PORT` | SSH port (default: `22`) | Optional |
+| Secret Name      | Value                          | Why                       |
+| ---------------- | ------------------------------ | ------------------------- |
+| `SERVER_HOST`    | Your server IP or domain       | SSH target for deployment |
+| `SERVER_USER`    | SSH username (e.g., `ubuntu`)  | SSH login                 |
+| `SERVER_SSH_KEY` | Private SSH key (full content) | Passwordless SSH auth     |
+| `SERVER_PORT`    | SSH port (default: `22`)       | Optional                  |
 
 > **How to create SSH key for CI:**
+>
 > ```bash
 > ssh-keygen -t ed25519 -C "github-actions" -f ~/.ssh/github_actions_key
 > # Add the PUBLIC key to your server's ~/.ssh/authorized_keys
@@ -90,12 +91,12 @@ Push to main only
 
 ## 🔒 Security Principles Demonstrated
 
-| Principle | Implementation |
-|---|---|
-| **Secrets never in code** | `.env` in `.gitignore`, real values only on server |
-| **`.env.example` has placeholders only** | Developers know what vars are needed, not the values |
-| **Scoped tokens** | Docker Hub token (not password), SSH key (not password) |
-| **Secrets injected at runtime** | `env_file` in docker-compose, not baked into Docker image |
-| **Environment protection** | GitHub `production` environment requires manual approval |
-| **No secrets in CI logs** | `appleboy/ssh-action` masks sensitive values |
-| **Multi-stage Docker build** | Frontend: no secrets ever needed; Backend: secrets at runtime only |
+| Principle                                | Implementation                                                     |
+| ---------------------------------------- | ------------------------------------------------------------------ |
+| **Secrets never in code**                | `.env` in `.gitignore`, real values only on server                 |
+| **`.env.example` has placeholders only** | Developers know what vars are needed, not the values               |
+| **Scoped tokens**                        | Docker Hub token (not password), SSH key (not password)            |
+| **Secrets injected at runtime**          | `env_file` in docker-compose, not baked into Docker image          |
+| **Environment protection**               | GitHub `production` environment requires manual approval           |
+| **No secrets in CI logs**                | `appleboy/ssh-action` masks sensitive values                       |
+| **Multi-stage Docker build**             | Frontend: no secrets ever needed; Backend: secrets at runtime only |

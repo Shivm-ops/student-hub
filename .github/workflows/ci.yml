@@ -33,7 +33,7 @@ jobs:
       - name: Build (production)
         run: npm run build
         env:
-          VITE_API_URL: http://localhost:5001/api   # non-secret build-time placeholder
+          VITE_API_URL: http://localhost:5001/api # non-secret build-time placeholder
 
   # ─────────────────────────────────────────────
   # Job 2: Backend — install & smoke test

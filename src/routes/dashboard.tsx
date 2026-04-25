@@ -31,10 +31,30 @@ function DashboardPage() {
     : "—";
 
   const stats = [
-    { label: "Total Students", value: students.length, icon: Users, accent: "var(--gradient-primary)" },
-    { label: "Active Courses", value: totalCourses, icon: BookOpen, accent: "linear-gradient(135deg, oklch(0.65 0.18 200), oklch(0.7 0.15 180))" },
-    { label: "Average Year", value: avgYear, icon: TrendingUp, accent: "linear-gradient(135deg, oklch(0.7 0.18 30), oklch(0.75 0.15 50))" },
-    { label: "Graduates 2024", value: 12, icon: GraduationCap, accent: "linear-gradient(135deg, oklch(0.6 0.2 320), oklch(0.7 0.18 290))" },
+    {
+      label: "Total Students",
+      value: students.length,
+      icon: Users,
+      accent: "var(--gradient-primary)",
+    },
+    {
+      label: "Active Courses",
+      value: totalCourses,
+      icon: BookOpen,
+      accent: "linear-gradient(135deg, oklch(0.65 0.18 200), oklch(0.7 0.15 180))",
+    },
+    {
+      label: "Average Year",
+      value: avgYear,
+      icon: TrendingUp,
+      accent: "linear-gradient(135deg, oklch(0.7 0.18 30), oklch(0.75 0.15 50))",
+    },
+    {
+      label: "Graduates 2024",
+      value: 12,
+      icon: GraduationCap,
+      accent: "linear-gradient(135deg, oklch(0.6 0.2 320), oklch(0.7 0.18 290))",
+    },
   ];
 
   return (

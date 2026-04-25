@@ -40,7 +40,12 @@ export function StudentForm({ onAdd }: Props) {
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="name">Full Name</Label>
-          <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Jane Doe" />
+          <Input
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Jane Doe"
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
@@ -54,11 +59,23 @@ export function StudentForm({ onAdd }: Props) {
         </div>
         <div className="space-y-2">
           <Label htmlFor="course">Course</Label>
-          <Input id="course" value={course} onChange={(e) => setCourse(e.target.value)} placeholder="Computer Science" />
+          <Input
+            id="course"
+            value={course}
+            onChange={(e) => setCourse(e.target.value)}
+            placeholder="Computer Science"
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="year">Year</Label>
-          <Input id="year" type="number" min={1} max={6} value={year} onChange={(e) => setYear(e.target.value)} />
+          <Input
+            id="year"
+            type="number"
+            min={1}
+            max={6}
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+          />
         </div>
       </div>
       <div className="mt-5 flex justify-end">

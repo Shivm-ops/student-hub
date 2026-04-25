@@ -59,7 +59,9 @@ function LoginPage() {
           style={{ boxShadow: "var(--shadow-elegant)" }}
         >
           <h2 className="mb-1 text-xl font-semibold">Sign in</h2>
-          <p className="mb-6 text-sm text-muted-foreground">Use any username and password (3+ chars).</p>
+          <p className="mb-6 text-sm text-muted-foreground">
+            Use any username and password (3+ chars).
+          </p>
 
           <div className="space-y-4">
             <div className="space-y-2">

@@ -1,18 +1,18 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const studentController = require('../controllers/studentController');
-const verifyToken = require('../middleware/auth');
+const studentController = require("../controllers/studentController");
+const verifyToken = require("../middleware/auth");
 
 // Apply JWT verification to all student routes
 router.use(verifyToken);
 
 // GET /api/students -> Fetch all students
-router.get('/', studentController.getAllStudents);
+router.get("/", studentController.getAllStudents);
 
 // POST /api/students -> Create a new student
-router.post('/', studentController.createStudent);
+router.post("/", studentController.createStudent);
 
 // DELETE /api/students/:id -> Delete a student
-router.delete('/:id', studentController.deleteStudent);
+router.delete("/:id", studentController.deleteStudent);
 
 module.exports = router;

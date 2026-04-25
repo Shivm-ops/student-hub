@@ -1,13 +1,11 @@
-const supabase = require('../config/supabase');
+const supabase = require("../config/supabase");
 
 /**
  * Fetch all students from Supabase
  */
 const getAllStudents = async (req, res, next) => {
   try {
-    const { data, error } = await supabase
-      .from('students')
-      .select('*');
+    const { data, error } = await supabase.from("students").select("*");
 
     if (error) throw error;
 
@@ -24,20 +22,20 @@ const createStudent = async (req, res, next) => {
   const { name, email, course } = req.body;
 
   if (!name || !email || !course) {
-    return res.status(400).json({ error: 'Name, email, and course are required' });
+    return res.status(400).json({ error: "Name, email, and course are required" });
   }
 
   try {
     const { data, error } = await supabase
-      .from('students')
+      .from("students")
       .insert([{ name, email, course }])
       .select();
 
     if (error) throw error;
 
     res.status(201).json({
-      message: 'Student created successfully',
-      student: data[0]
+      message: "Student created successfully",
+      student: data[0],
     });
   } catch (err) {
     next(err);
@@ -51,14 +49,11 @@ const deleteStudent = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const { error } = await supabase
-      .from('students')
-      .delete()
-      .eq('id', id);
+    const { error } = await supabase.from("students").delete().eq("id", id);
 
     if (error) throw error;
 
-    res.json({ message: 'Student deleted successfully' });
+    res.json({ message: "Student deleted successfully" });
   } catch (err) {
     next(err);
   }
@@ -67,5 +62,5 @@ const deleteStudent = async (req, res, next) => {
 module.exports = {
   getAllStudents,
   createStudent,
-  deleteStudent
+  deleteStudent,
 };

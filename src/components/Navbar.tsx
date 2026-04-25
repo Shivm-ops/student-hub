@@ -92,7 +92,12 @@ export function Navbar() {
             >
               <Users className="h-4 w-4" /> Students
             </Link>
-            <Button variant="outline" size="sm" className="mt-2 justify-start" onClick={handleLogout}>
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-2 justify-start"
+              onClick={handleLogout}
+            >
               <LogOut className="h-4 w-4" /> Logout
             </Button>
           </div>

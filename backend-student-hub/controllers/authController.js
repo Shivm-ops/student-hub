@@ -1,9 +1,9 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 // Hardcoded admin credentials as requested
 const ADMIN_CREDENTIALS = {
-  username: 'admin',
-  password: 'admin123'
+  username: "admin",
+  password: "admin123",
 };
 
 /**
@@ -14,20 +14,20 @@ const login = (req, res) => {
 
   if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
     const token = jwt.sign(
-      { username: ADMIN_CREDENTIALS.username, role: 'admin' },
-      process.env.JWT_SECRET || 'fallbacksecret',
-      { expiresIn: '24h' }
+      { username: ADMIN_CREDENTIALS.username, role: "admin" },
+      process.env.JWT_SECRET || "fallbacksecret",
+      { expiresIn: "24h" },
     );
 
     return res.json({
-      message: 'Login successful',
-      token
+      message: "Login successful",
+      token,
     });
   }
 
-  return res.status(401).json({ error: 'Invalid username or password' });
+  return res.status(401).json({ error: "Invalid username or password" });
 };
 
 module.exports = {
-  login
+  login,
 };

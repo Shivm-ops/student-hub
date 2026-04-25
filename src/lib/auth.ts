@@ -1,17 +1,19 @@
 const KEY = "erp_auth_token";
 const getApiUrl = () => {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return process.env.VITE_API_URL || "http://backend:5001/api";
   }
   return import.meta.env.VITE_API_URL || "http://localhost:5001/api";
 };
 const API_URL = getApiUrl();
 
-
 export const authApi = {
-  login: async (username: string, password: string): Promise<{ username: string; token: string }> => {
+  login: async (
+    username: string,
+    password: string,
+  ): Promise<{ username: string; token: string }> => {
     if (!username || !password) throw new Error("Username and password required");
-    
+
     const res = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
