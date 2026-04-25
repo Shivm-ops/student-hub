@@ -25,14 +25,14 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME || 'shivam0023' }}
+          username: shivam0023
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Extract metadata (tag = short SHA)
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME || 'shivam0023' }}/student-hub-frontend
+          images: shivam0023/student-hub-frontend
           tags: |
             type=sha,format=short
 
@@ -46,8 +46,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME || 'shivam0023' }}/student-hub-frontend:latest
-            ${{ secrets.DOCKERHUB_USERNAME || 'shivam0023' }}/student-hub-frontend:${{ steps.meta.outputs.version }}
+            shivam0023/student-hub-frontend:latest
+            shivam0023/student-hub-frontend:${{ steps.meta.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -58,8 +58,8 @@ jobs:
           context: ./backend-student-hub
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME || 'shivam0023' }}/student-hub-backend:latest
-            ${{ secrets.DOCKERHUB_USERNAME || 'shivam0023' }}/student-hub-backend:${{ steps.meta.outputs.version }}
+            shivam0023/student-hub-backend:latest
+            shivam0023/student-hub-backend:${{ steps.meta.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -84,8 +84,8 @@ jobs:
           script: |
             set -e
 
-            IMAGE_FRONTEND="${{ secrets.DOCKERHUB_USERNAME || 'shivam0023' }}/student-hub-frontend:latest"
-            IMAGE_BACKEND="${{ secrets.DOCKERHUB_USERNAME || 'shivam0023' }}/student-hub-backend:latest"
+            IMAGE_FRONTEND="shivam0023/student-hub-frontend:latest"
+            IMAGE_BACKEND="shivam0023/student-hub-backend:latest"
 
             echo "📦 Pulling latest images..."
             docker pull "${IMAGE_FRONTEND}"
