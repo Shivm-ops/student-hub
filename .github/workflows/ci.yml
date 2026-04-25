@@ -33,7 +33,7 @@ jobs:
       - name: Build (production)
         run: npm run build
         env:
-          VITE_API_URL: http://localhost:5001/api   # placeholder for build validation
+          VITE_API_URL: http://localhost:5001/api   # non-secret build-time placeholder
 
   # ─────────────────────────────────────────────
   # Job 2: Backend — install & smoke test
@@ -60,22 +60,39 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Smoke test — server starts
+      - name: Smoke test — server starts and responds
         run: |
-          # Start server in background with dummy env vars
+          # Start server with dummy env vars (no real secrets in CI)
           PORT=5001 \
           SUPABASE_URL=https://placeholder.supabase.co \
           SUPABASE_SERVICE_ROLE_KEY=placeholder_key \
           JWT_SECRET=ci_test_secret_key \
           node server.js &
 
-          # Wait for it to be ready
-          sleep 4
+          SERVER_PID=$!
+          echo "Server PID: $SERVER_PID"
 
-          # Hit the health endpoint
-          curl --fail http://localhost:5001/ || (echo "❌ Server health check failed" && exit 1)
+          # Wait up to 10s for server to be ready
+          for i in $(seq 1 10); do
+            if curl --silent --fail http://localhost:5001/ > /dev/null 2>&1; then
+              echo "✅ Backend responded on attempt $i"
+              break
+            fi
+            echo "⏳ Waiting... attempt $i"
+            sleep 1
+            if [ "$i" -eq 10 ]; then
+              echo "❌ Server did not start in time"
+              kill $SERVER_PID 2>/dev/null
+              exit 1
+            fi
+          done
 
-          echo "✅ Backend started and responded successfully"
+          # Confirm the health endpoint returns 200
+          RESPONSE=$(curl --silent --write-out "%{http_code}" http://localhost:5001/)
+          echo "Response: $RESPONSE"
+
+          kill $SERVER_PID 2>/dev/null
+          echo "✅ Smoke test passed"
 
   # ─────────────────────────────────────────────
   # Job 3: Docker build validation
