@@ -95,10 +95,10 @@ jobs:
             cd ~/student-hub
 
             # ⚠️  App secrets live ONLY on the server in .env — never in GitHub
-            docker compose down
+            docker-compose down
             IMAGE_FRONTEND="${IMAGE_FRONTEND}" \
             IMAGE_BACKEND="${IMAGE_BACKEND}" \
-            docker compose up -d
+            docker-compose up -d
 
             echo "✅ Deployed successfully!"
             docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
