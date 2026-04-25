@@ -98,6 +98,8 @@ jobs:
             docker compose down
             IMAGE_FRONTEND="${IMAGE_FRONTEND}" \
             IMAGE_BACKEND="${IMAGE_BACKEND}" \
+            PORT_FRONTEND=8081 \
+            PORT_BACKEND=5001 \
             docker compose up -d
 
             echo "✅ Deployed successfully!"
