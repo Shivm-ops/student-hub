@@ -24,6 +24,9 @@ To prove that a full-stack cloud application can be deployed with **Zero Leaks**
 5. **Container Security**: Mapping secrets into isolated Docker containers at runtime.
    ![Docker Runtime](./screenshot/docker%20ps.png)
 
+6. **Vault Integration**: Centralized secret management using HashiCorp Vault to eliminate plain-text environment files.
+   ![Vault Integration](./screenshot/voult.png)
+
 ---
 
 ## 🛡️ Security Strategy
